@@ -1,0 +1,92 @@
+<div class="col">
+	<h1>Albums</h1>	
+	<table class="table">
+		<thead>
+			<tr>
+				<th>Album Names</th>
+				<th>Read</th>
+				<th>Update</th>
+				<th>Delete</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr *ngFor="let album of albums.data">
+				<td>{{ album.title }}</td>
+				<td>
+					<svg class="icon">
+						<use xlink:href="../../assets/img/sprites.svg#icon-address-book"></use>
+					</svg>
+				</td>
+				<td>
+					<svg class="icon">
+						<use xlink:href="../../assets/img/sprites.svg#icon-loop2"></use>
+					</svg>
+				</td>
+				<td>
+					<svg class="icon">
+						<use xlink:href="../../assets/img/sprites.svg#icon-minus"></use>
+					</svg>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+
+<br><br>
+<hr>
+
+
+<div class="col">
+	<h2>Add Album</h2>
+	<form [formGroup]="albumForm" (ngSubmit)="onSubmit()">
+		<div class="form-group">
+			<label>Title</label>
+			<input 
+				type="text" 
+				class="form-control"
+				formControlName="title">
+			<div class="alert alert-danger"
+				 *ngIf="title.invalid && title.touched">
+				<p *ngIf="title.errors.required"> This field is required.</p>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label>Description</label>
+			<input 
+				type="text" 
+				class="form-control"
+				formControlName="description">
+			<div class="alert alert-danger"
+				 *ngIf="description.invalid && description.touched">
+				<p *ngIf="description.errors.required"> This field is required.</p>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label>Image ID's</label>
+			<input 
+				type="text" 
+				class="form-control"
+				formControlName="ids">
+			<div class="alert alert-danger"
+				 *ngIf="ids.invalid && ids.touched">
+				<p *ngIf="ids.errors.required"> This field is required.</p>
+			</div>
+		</div>
+
+
+		<div class="form-group">
+			<label>Cover Img</label>
+			<input 
+				type="text" 
+				class="form-control"
+				formControlName="cover">
+			<div class="alert alert-danger"
+				 *ngIf="cover.invalid && cover.touched">
+				<p *ngIf="cover.errors.required"> This field is required.</p>
+			</div>
+		</div>
+		<button class="btn btn-primary" [disabled]="albumForm.invalid">SAVE</button>
+	</form>
+</div>
