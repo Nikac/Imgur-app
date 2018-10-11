@@ -1,0 +1,15 @@
+<div class="col"
+	*ngIf="album$ | async; let album">
+	<hr>
+	<h2>Album ID: <strong>{{album.data.id}}</strong></h2>
+	<p>Album Title: {{album.data.title}}</p>
+	<p>Album Description: {{album.data.description}}</p>
+	<p>Link: <a href="{{album.data.link}}">see album</a></p>
+	<div>
+		<h3>Image's Title</h3>
+		<ul class="list-group">
+			<li class="list-group-item"
+				*ngFor="let image of album.data.images">{{image.title}}</li> 
+		</ul>
+	</div>
+</div>

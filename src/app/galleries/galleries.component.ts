@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
 
 import { GalleryService } from '../services/gallery.service';
 import { Album } from '../models/album.model';
+import { mergeMap } from 'rxjs/operators';
+import { Observable } from 'rxjs/Observable';
+// import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-galleries',
@@ -10,50 +12,58 @@ import { Album } from '../models/album.model';
   styleUrls: ['./galleries.component.css']
 })
 export class GalleriesComponent implements OnInit {
-  albums: Album[] = [];
-  album: Album = {};
+  album: Album; 
+  albums$: Observable<Album[]>;
+  updateAlbum: Album;
+  albumHash: string;
+  showForm: boolean = false;
 
   constructor(private galleryService: GalleryService) { }
 
   ngOnInit() {
-    this.galleryService.getAlbums()
-      .subscribe(
-        (result: Album[]) => {
-          console.log(result);
-          this.albums = result;
-        }
-      );
+     // GET all albums
+      this.albums$ = this.galleryService.getAlbums();
+              
   }
 
-  // form
-  albumForm = new FormGroup({
-    title: new FormControl('' , Validators.required),
-    description: new FormControl('' , Validators.required),
-    ids: new FormControl([] , Validators.required),
-    cover: new FormControl('' , Validators.required),
-  });
+  // ngOnChanges() {
+  //   this.albums;
+  // }
 
 
-  onSubmit() {
-    console.log(this.albumForm.value);
-   
+  // Read Album
+  onRead(id: string) {
+    this.albumHash = id;
+    this.galleryService.getAlbumSubject(id);
+  }
+  
+  // Add new album
+  onAdd() {
+    this.showForm = !this.showForm;
   }
 
-  // geting inputs for validating the form
-  get title() {
-    return this.albumForm.get('title');
-  }
+  // Update album
+  onUpdate(id: string) {
+    this.albumHash = id;
 
-  get ids() {
-    return this.albumForm.get('ids');
-  }
+    this.galleryService.getAlbum(this.albumHash)
+            .subscribe(
+                data => {
+                  this.updateAlbum = data.data;
+                  console.log(this.updateAlbum); 
+                  this.showForm = true;
+                }
+          )
+  };
 
-   get description() {
-    return this.albumForm.get('description');
-  }
-
-  get cover() {
-    return this.albumForm.get('cover');
+  // Delete album
+  onDelete(id: string) {
+     this.albumHash =id;
+     this.galleryService.deleteAlbum(this.albumHash)
+            .subscribe(
+                data => console.log(data),
+                err => console.log(err)
+            )
   }
 
 }

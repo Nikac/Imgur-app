@@ -8,11 +8,15 @@ import { GalleriesComponent } from './galleries/galleries.component';
 
 import { GalleryService } from './services/gallery.service';
 import { MyInterceptor } from './services/my-interceptor';
+import { AlbumFormComponent } from './album-form/album-form.component';
+import { AlbumDetailsComponent } from './album-details/album-details.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    GalleriesComponent
+    GalleriesComponent,
+    AlbumFormComponent,
+    AlbumDetailsComponent
   ],
   imports: [
     BrowserModule,
