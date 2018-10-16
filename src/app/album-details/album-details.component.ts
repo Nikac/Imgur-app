@@ -16,6 +16,7 @@ export class AlbumDetailsComponent implements OnInit {
   constructor(private galleryService: GalleryService) {}
 
   ngOnInit() {
+  	// album$ observables with details
   	this.album$ = this.galleryService.newAlbumSubject
   		.pipe(
   			mergeMap( val => this.galleryService.getAlbum(val))

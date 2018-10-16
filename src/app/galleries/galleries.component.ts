@@ -13,27 +13,24 @@ import { Observable } from 'rxjs/Observable';
 })
 export class GalleriesComponent implements OnInit {
   album: Album; 
-  albums$: Observable<Album[]>;
+  albums = [];
   updateAlbum: Album;
   albumHash: string;
   showForm: boolean = false;
+  albumDetails: boolean = false;
+  value: any;
 
   constructor(private galleryService: GalleryService) { }
 
   ngOnInit() {
      // GET all albums
-      this.albums$ = this.galleryService.getAlbums();
-              
+     this.galleryService.getAlbums().subscribe(result => this.albums = result )
   }
-
-  // ngOnChanges() {
-  //   this.albums;
-  // }
 
 
   // Read Album
   onRead(id: string) {
-    this.albumHash = id;
+    this.albumDetails = true;
     this.galleryService.getAlbumSubject(id);
   }
   
@@ -44,24 +41,16 @@ export class GalleriesComponent implements OnInit {
 
   // Update album
   onUpdate(id: string) {
-    this.albumHash = id;
-
-    this.galleryService.getAlbum(this.albumHash)
-            .subscribe(
-                data => {
-                  this.updateAlbum = data.data;
-                  console.log(this.updateAlbum); 
-                  this.showForm = true;
-                }
-          )
+      this.showForm = true;
+      this.galleryService.getAlbumId(id);
   };
 
   // Delete album
-  onDelete(id: string) {
+  onDelete(id: string, i: number) {
      this.albumHash =id;
      this.galleryService.deleteAlbum(this.albumHash)
             .subscribe(
-                data => console.log(data),
+                data => this.albums.splice(i, 1),
                 err => console.log(err)
             )
   }
