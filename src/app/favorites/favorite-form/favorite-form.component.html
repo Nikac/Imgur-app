@@ -1,0 +1,24 @@
+<div class="col">
+	<h4>Add image</h4>
+	<form (ngSubmit)="onSubmit(f)" #f="ngForm">
+		<div class="form-group">
+			<label>Title</label>
+			<input 
+				type="text" 
+				name="title"
+				class="form-control"
+				ngModel
+				required>
+		</div>
+		<div class="form-group">
+			<label>Image URL</label>
+			<input 
+				type="text" 
+				name="imageUrl"
+				class="form-control"
+				ngModel
+				required>
+		</div>
+		<button class="btn btn-primary">Submit</button>
+	</form>
+</div>

@@ -1,0 +1,35 @@
+<div class="col">
+	<h2>Favorites</h2>
+	<table class="table">
+		<thead>
+			<tr>
+				<th>Title</th>		
+				<th>Cover</th>	
+				<th>Add image</th>	
+				<th>Delete image</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr *ngFor="let favorite of favAlbums; let i=index">
+				<td>{{ favorite.title }}</td>
+				<td>
+					<img src="{{favorite.images[0].link}}" alt="pic" style="width: 100px;">
+				</td>
+				<td>
+					<svg class="icon">
+						<use xlink:href="../../assets/img/sprites.svg#icon-plus"></use>
+					</svg>
+				</td>
+				<th>
+					<svg class="icon" 
+						(click)="onDelete(favorite.id, i)">
+						<use xlink:href="../../assets/img/sprites.svg#icon-minus"></use>
+					</svg>
+				</th>
+			</tr>
+		</tbody>
+	</table>
+
+	<hr>
+	<app-favorite-form></app-favorite-form>
+</div>

@@ -37,6 +37,11 @@ export class GalleriesComponent implements OnInit {
   // Add new album
   onAdd() {
     this.showForm = !this.showForm;
+    this.galleryService.getAlbum('D4pqnmo')
+      .subscribe(
+        res => console.log(res),
+        err => console.log(err)
+      )
   }
 
   // Update album

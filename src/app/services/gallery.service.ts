@@ -27,7 +27,7 @@ export class GalleryService {
 
   // POST album
   newAlbum(album: Album) {
-    return this.http.post<any>(`${this.url}/album`, album )
+    return this.http.post<any>(`${this.url}/album/`, album )
   }
 
   // GET album

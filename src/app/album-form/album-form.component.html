@@ -11,7 +11,7 @@
 				#ids="ngModel"
 				required>
 			<div class="alert alert-danger"
-				*ngIf="ids.invalid && (ids.dirty || ids.touched)">
+				*ngIf="ids.invalid && ((ids.dirty || ids.touched) && title === '')">
 				<p *ngIf="ids.errors.required"> This field is required.</p>
 			</div>
 		</div>
@@ -26,7 +26,7 @@
 				#title="ngModel"
 				required>
 			<div class="alert alert-danger"
-				*ngIf="title.invalid && (title.dirty || title.touched)">
+				*ngIf="title.invalid && ((title.dirty || title.touched) && title === '')">
 				<p *ngIf="title.errors.required">This field is required.</p>
 			</div>
 		</div>
@@ -41,7 +41,7 @@
 				#description="ngModel"
 				required>
 			<div class="alert alert-danger"
-				*ngIf="description.invalid && (description.dirty || description.touched)">
+				*ngIf="description.invalid && ((description.dirty || description.touched) && description === '')">
 				<p *ngIf="description.errors.required"> This field is required.</p>
 			</div>
 		</div>
@@ -56,7 +56,7 @@
 				#cover="ngModel"
 				required>
 			<div class="alert alert-danger"
-				*ngIf="cover.invalid && (cover.dirty || cover.touched)">
+				*ngIf="cover.invalid && ((cover.dirty || cover.touched) && cover === '')">
 				<p *ngIf="cover.errors.required"> This field is required.</p>
 			</div>
 		</div>
