@@ -7,26 +7,66 @@
 				<th>Cover</th>	
 				<th>Add image</th>	
 				<th>Delete image</th>
+				<th>Comments</th>
 			</tr>
 		</thead>
 		<tbody>
 			<tr *ngFor="let favorite of favAlbums; let i=index">
 				<td>{{ favorite.title }}</td>
 				<td>
-					<img src="{{favorite.images[0].link}}" alt="pic" style="width: 100px;">
+					<img src="{{favorite.images[0].link}}" alt="pic" style="width: 50px;">
 				</td>
 				<td>
 					<svg class="icon">
 						<use xlink:href="../../assets/img/sprites.svg#icon-plus"></use>
 					</svg>
 				</td>
-				<th>
+				<td>
 					<svg class="icon" 
 						(click)="onDelete(favorite.id, i)">
 						<use xlink:href="../../assets/img/sprites.svg#icon-minus"></use>
 					</svg>
-				</th>
+				</td>
+				<td>
+					<button class="btn btn-primary btn-sm" (click)="onRead(favorite.id)">Read comments</button>
+				</td>
 			</tr>
+			<ng-container *ngIf="comments">
+				<tr *ngFor="let comment of comments | slice:0:showAllComments">
+					<td colspan="3">
+						{{ comment.comment }}<br>
+						<form 
+							class="form-inline"
+							*ngIf="comment.id === commentId"
+							(ngSubmit)="onSubmit(f)" 
+							#f="ngForm">
+							<div class="form-group">
+								<input type="text" 
+									name="comment" 
+									class="form-control"
+									ngModel>
+								<button class="btn btn-primary btn-sm">leave comment</button>
+							</div>
+						</form>
+					</td>
+					<td>
+						<svg class="icon" (click)="onAddComment(comment.id)">
+							<use xlink:href="../../assets/img/sprites.svg#icon-plus"></use>
+						</svg>
+					</td>
+					<td>
+						<svg class="icon" 
+							(click)="onDelete(favorite.id, i)">
+							<use xlink:href="../../assets/img/sprites.svg#icon-minus"></use>
+						</svg>
+					</td>
+				</tr>
+				<tr *ngIf="showAllComments === 5">
+					<button 
+						class="btn btn-success btn-sm"
+						(click)="showAllComments=1000">Load all comments</button><br>
+				</tr>
+			</ng-container>
 		</tbody>
 	</table>
 

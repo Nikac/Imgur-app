@@ -18,13 +18,14 @@ export class GalleriesComponent implements OnInit {
   albumHash: string;
   showForm: boolean = false;
   albumDetails: boolean = false;
-  value: any;
+  albumId: string;
 
   constructor(private galleryService: GalleryService) { }
 
   ngOnInit() {
      // GET all albums
      this.galleryService.getAlbums().subscribe(result => this.albums = result )
+          
   }
 
 
@@ -35,9 +36,9 @@ export class GalleriesComponent implements OnInit {
   }
   
   // Add new album
-  onAdd() {
+  onAdd(id: string) {
     this.showForm = !this.showForm;
-    this.galleryService.getAlbum('D4pqnmo')
+    this.galleryService.getAlbum(id)
       .subscribe(
         res => console.log(res),
         err => console.log(err)
@@ -46,6 +47,7 @@ export class GalleriesComponent implements OnInit {
 
   // Update album
   onUpdate(id: string) {
+      // this.albumId = id;
       this.showForm = true;
       this.galleryService.getAlbumId(id);
   };

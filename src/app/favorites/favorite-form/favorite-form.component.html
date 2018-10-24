@@ -1,24 +1,34 @@
 <div class="col">
 	<h4>Add image</h4>
-	<form (ngSubmit)="onSubmit(f)" #f="ngForm">
+	<form [formGroup]="imageForm" (ngSubmit)="onSubmit()">
 		<div class="form-group">
 			<label>Title</label>
 			<input 
 				type="text" 
 				name="title"
 				class="form-control"
-				ngModel
+				formControlName="title"
 				required>
+			<div class="alert alert-danger"
+				*ngIf="(title.invalid && (title.dirty || title.touched))">
+				<p *ngIf="title.errors.required">This field is required.</p>		
+			</div>
 		</div>
 		<div class="form-group">
 			<label>Image URL</label>
 			<input 
-				type="text" 
+				type="file" 
 				name="imageUrl"
+				(change)="onFileSelected($event)"
 				class="form-control"
-				ngModel
-				required>
+				formControlName="imageUrl"
+				>
+			<div class="alert alert-danger"
+				*ngIf="(imagePath.invalid && (imagePath.dirty || imagePath.touched))">
+				<p *ngIf="imagePath.errors.required">This field is required.</p>		
+			</div>
 		</div>
 		<button class="btn btn-primary">Submit</button>
 	</form>
 </div>
+

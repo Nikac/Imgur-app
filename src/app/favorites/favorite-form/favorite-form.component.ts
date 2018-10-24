@@ -1,5 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { NgForm } from '@angular/forms';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
+
+import { FavoritesService } from '../../services/favorites.service';
 
 @Component({
   selector: 'app-favorite-form',
@@ -7,16 +9,43 @@ import { NgForm } from '@angular/forms';
   styleUrls: ['./favorite-form.component.css']
 })
 export class FavoriteFormComponent implements OnInit {
-  @ViewChild('f') form: NgForm;
+  image: File = null;
 
-  constructor() { }
+ 
+  constructor(private favoritesService: FavoritesService) { }
 
   ngOnInit() {}
 
-  onSubmit(f: NgForm) {
-  	console.log(f.value);
+  onSubmit() {
+  	const fd = new FormData();
+  	fd.append('image', this.imageUrl);
+ 
 
-  	this.form.reset();
+  	fd.forEach((value,key) => {
+	      this.image = key+'='+value;
+	});
+
+	console.log(this.image);
+  
+  	this.favoritesService.addImage(this.image)
+  		.subscribe(
+  			res => console.log(res),
+  			err => console.log(err)
+  		)
   }
 
+  onFileSelected(event) {
+  	console.log(event.target.files[0].name);
+  	this.imageUrl = event.target.files[0].name;
+  }
+
+  imageForm = new FormGroup({
+  		title: new FormControl('')
+  		imageUrl: new FormControl('', Validators.required)
+  	});
+
+  get title() { return this.imageForm.get('title').value}
+  get imagePath() { return this.imageForm.get('imageUrl').value}
+
 }
+

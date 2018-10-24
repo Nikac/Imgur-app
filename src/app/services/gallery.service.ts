@@ -18,6 +18,7 @@ export class GalleryService {
 
   public newAlbumSubject = new Subject<any>();
   public newAlbumID = new Subject<any>();
+  public newGalleryHash = new Subject<any>();
 
   // GET albums
   getAlbums() {
@@ -53,5 +54,10 @@ export class GalleryService {
   // subject for passing ID for updating album
   getAlbumId(id: string) {
     this.newAlbumID.next(id);
+  }
+
+
+  getGalleryHash(id: string) {
+    this.newGalleryHash.next(id);
   }
 }

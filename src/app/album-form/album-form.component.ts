@@ -16,6 +16,7 @@ export class AlbumFormComponent implements OnInit{
   album = {};
   album.ids = [];
   editMode: boolean = false;
+  newAlbum = {};
 
   constructor(private galleryService: GalleryService) { }
 
@@ -40,6 +41,21 @@ export class AlbumFormComponent implements OnInit{
 
   // Save new album
   onSubmit(f: NgForm) {
+    // this.newAlbum = f.value;
+    // console.log(f.value);
+
+    const fd = new FormData();
+    fd.append('ids[]', f.value.ids);
+    fd.append('title', f.value.title);
+    fd.append('description', f.value.description);
+    fd.append('cover', f.value.cover);
+
+    fd.forEach((key, value) => {
+      // console.log(key + '=' + value);
+     
+    }); 
+
+
     // if album object is not empty update
     if (this.editMode) {
           // update album
@@ -48,12 +64,13 @@ export class AlbumFormComponent implements OnInit{
               res => {
                 console.log(res);
                 this.album = res;
+                // this.galleryService.getUpdatedAlbum(this.album);
               },
               err => console.log(err)
             )
     } else {
       // if its not empty create new one
-      this.galleryService.newAlbum(f.value)
+      this.galleryService.newAlbum(fd)
         .subscribe(
             data => {
                 console.log(data);
@@ -64,8 +81,5 @@ export class AlbumFormComponent implements OnInit{
     }
    
   };
-
-
-
 
 }

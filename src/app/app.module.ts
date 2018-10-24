@@ -8,6 +8,7 @@ import { GalleriesComponent } from './galleries/galleries.component';
 
 import { GalleryService } from './services/gallery.service';
 import { FavoritesService } from './services/favorites.service';
+import { CommentsService } from './services/comments.service';
 import { MyInterceptor } from './services/my-interceptor';
 import { AlbumFormComponent } from './album-form/album-form.component';
 import { AlbumDetailsComponent } from './album-details/album-details.component';
@@ -36,6 +37,7 @@ import { FavoriteFormComponent } from './favorites/favorite-form/favorite-form.c
   providers: [
   	GalleryService, 
     FavoritesService,
+    CommentsService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: MyInterceptor,
