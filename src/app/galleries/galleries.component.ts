@@ -24,16 +24,21 @@ export class GalleriesComponent implements OnInit {
 
   ngOnInit() {
      // GET all albums
-     this.galleryService.getAlbums().subscribe(result => this.albums = result )
-          
+     this.galleryService.getAlbums().subscribe(result => this.albums = result.data)  
+     this.galleryService.newCreatedAlbum
+      .pipe(
+        mergeMap(value => this.galleryService.getAlbum(value))
+      ).subscribe(
+        res => this.albums.push(res.data),
+        err => console.log(err)
+      )
   }
-
 
   // Read Album
   onRead(id: string) {
     this.albumDetails = true;
     this.galleryService.getAlbumSubject(id);
-  }
+  };
   
   // Add new album
   onAdd(id: string) {
@@ -43,7 +48,7 @@ export class GalleriesComponent implements OnInit {
         res => console.log(res),
         err => console.log(err)
       )
-  }
+  };
 
   // Update album
   onUpdate(id: string) {
@@ -57,9 +62,10 @@ export class GalleriesComponent implements OnInit {
      this.albumHash =id;
      this.galleryService.deleteAlbum(this.albumHash)
             .subscribe(
-                data => this.albums.splice(i, 1),
+                data => console.log(data),
                 err => console.log(err)
             )
-  }
+    this.albums.splice(i, 1);
+  };
 
 }

@@ -28,13 +28,36 @@
 					</svg>
 				</td>
 				<td>
-					<button class="btn btn-primary btn-sm" (click)="onRead(favorite.id)">Read comments</button>
+					<button class="btn btn-primary btn-sm" 
+							(click)="onRead(favorite.id)"
+							>{{ showHideComments }}</button>
 				</td>
 			</tr>
-			<ng-container *ngIf="comments">
+			<ng-container *ngIf="comments.length > 1">
+				<h4 class="comments__heading">Comments</h4>
 				<tr *ngFor="let comment of comments | slice:0:showAllComments">
-					<td colspan="3">
+					<td colspan="5">
 						{{ comment.comment }}<br>
+						<ul class="comments__list">
+							<li>
+								<button class="btn btn-sm" (click)="onReadAllChildrenComments(comment.id)">Read all comments</button>
+							</li>
+							<li>
+								<button class="btn btn-sm" (click)="onVote(comment.id)">Like</button> likes: <strong>{{comment.ups}}</strong>
+							</li>
+							<li>
+								<button class="btn btn-sm" (click)="onAddComment(comment.id)">Leave comment</button>
+							</li>
+							<li>
+								<button class="btn btn-sm" (click)="onDelete(comment.id)">Delete Comment</button>
+							</li>
+						</ul>
+						<br><br>
+						<ul class="list-group">
+							<ng-container *ngIf="comment.id === replyId && (repliesComments.length - 1)">
+								<li class="list-group-item" *ngFor="let reply of repliesComments">{{ reply.comment }}</li>
+							</ng-container>
+						</ul>
 						<form 
 							class="form-inline"
 							*ngIf="comment.id === commentId"
@@ -49,22 +72,11 @@
 							</div>
 						</form>
 					</td>
-					<td>
-						<svg class="icon" (click)="onAddComment(comment.id)">
-							<use xlink:href="../../assets/img/sprites.svg#icon-plus"></use>
-						</svg>
-					</td>
-					<td>
-						<svg class="icon" 
-							(click)="onDelete(favorite.id, i)">
-							<use xlink:href="../../assets/img/sprites.svg#icon-minus"></use>
-						</svg>
-					</td>
 				</tr>
 				<tr *ngIf="showAllComments === 5">
 					<button 
-						class="btn btn-success btn-sm"
-						(click)="showAllComments=1000">Load all comments</button><br>
+						class="btn btn-success btn-sm btn-load"
+						(click)="showAllComments=1000">Load all comments</button>
 				</tr>
 			</ng-container>
 		</tbody>

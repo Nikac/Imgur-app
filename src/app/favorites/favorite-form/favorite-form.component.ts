@@ -40,7 +40,7 @@ export class FavoriteFormComponent implements OnInit {
   }
 
   imageForm = new FormGroup({
-  		title: new FormControl('')
+  		title: new FormControl(''),
   		imageUrl: new FormControl('', Validators.required)
   	});
 

@@ -19,26 +19,26 @@ export class GalleryService {
   public newAlbumSubject = new Subject<any>();
   public newAlbumID = new Subject<any>();
   public newGalleryHash = new Subject<any>();
+  public newCreatedAlbum = new Subject<any>();
 
   // GET albums
   getAlbums() {
-    // let headers =  new HttpHeaders().set('Authorization', 'Bearer 308b3c89fbbdceee1827a1f19ce88886d3a541d0')
-  	return this.http.get<any[]>(`${this.url}/account/Guzina/albums/`)
+  	return this.http.get<any[]>(`${this.url}/account/Guzina/albums/`);
   }
 
   // POST album
   newAlbum(album: Album) {
-    return this.http.post<any>(`${this.url}/album/`, album )
+    return this.http.post<any>(`${this.url}/album/`, album );
   }
 
   // GET album
   getAlbum(id:string) {
-    return this.http.get<any>(`${this.url}/album/` + id)
+    return this.http.get<any>(`${this.url}/album/` + id);
   }
 
   // Put album
   updateAlbum(id: string, album: Album) {
-    return this.http.put<any>(`${this.url}/album/` + id, album)
+    return this.http.put<any>(`${this.url}/album/` + id, album);
   }
 
   // Delete album
@@ -59,5 +59,9 @@ export class GalleryService {
 
   getGalleryHash(id: string) {
     this.newGalleryHash.next(id);
+  }
+
+  getNewAlbum(id: string) {
+    this.newCreatedAlbum.next(id);
   }
 }

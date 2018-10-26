@@ -11,7 +11,7 @@
 			</tr>
 		</thead>
 		<tbody>
-			<tr *ngFor="let album of albums.data">
+			<tr *ngFor="let album of albums; let i=index">
 				<td>{{ album.title }}</td>
 				<td>
 					<svg class="icon" (click)="onRead(album.id)">
@@ -41,4 +41,4 @@
 <app-album-details></app-album-details>
 <br><br><hr>
 <!-- album form form POST and PUT -->
-<app-album-form></app-album-form>
+<app-album-form *ngIf="showForm"></app-album-form>

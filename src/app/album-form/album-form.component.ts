@@ -29,32 +29,20 @@ export class AlbumFormComponent implements OnInit{
       )
       .subscribe(
         res => { 
-          // filter through images array to get ids for the form
-          res.data.images.filter(ids => this.ids.push(ids.id));
           this.album = res.data; 
+          // filter through images array to get ids for the form
+          this.album.images.filter(ids => this.ids.push(ids.id));
+          console.log(this.ids);
           this.album.ids = this.ids;
           this.editMode =true;
         },
         err => console.log(err)
       )
-  }
+  };
 
   // Save new album
   onSubmit(f: NgForm) {
-    // this.newAlbum = f.value;
-    // console.log(f.value);
-
-    const fd = new FormData();
-    fd.append('ids[]', f.value.ids);
-    fd.append('title', f.value.title);
-    fd.append('description', f.value.description);
-    fd.append('cover', f.value.cover);
-
-    fd.forEach((key, value) => {
-      // console.log(key + '=' + value);
-     
-    }); 
-
+    this.newAlbum = f.value;
 
     // if album object is not empty update
     if (this.editMode) {
@@ -70,16 +58,18 @@ export class AlbumFormComponent implements OnInit{
             )
     } else {
       // if its not empty create new one
-      this.galleryService.newAlbum(fd)
+      this.galleryService.newAlbum(this.newAlbum)
         .subscribe(
-            data => {
-                console.log(data);
-             
+            res => {
+                this.newAlbum = res.data;
+                this.galleryService.getAlbum(this.newAlbum.id)
+                  .subscribe(
+                    res => this.galleryService.getNewAlbum(this.newAlbum.id), 
+                    err => console.log(err)
+                  )
                 this.form.reset();
             }
         )
-    }
-   
+    } 
   };
-
 }

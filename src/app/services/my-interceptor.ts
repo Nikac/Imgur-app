@@ -11,8 +11,8 @@ export class MyInterceptor implements HttpInterceptor {
 	intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
 
 		let request = req.clone({
-			headers: new HttpHeaders().append('Authorization', 'Bearer 308b3c89fbbdceee1827a1f19ce88886d3a541d0')
-									  .append('Content-Type', 'multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW')
+			headers: new HttpHeaders().append('Authorization', 'Bearer beb7fb0135f13e770527466d6b69c2b9e529126f')
+									
 		});
 
 		return next.handle(request);

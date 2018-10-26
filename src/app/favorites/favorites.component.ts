@@ -23,6 +23,11 @@ export class FavoritesComponent implements OnInit {
   showForm: false;
   commentId: number;
   showAllComments = 5;
+  showComments: boolean =false;
+  showHideComments: string = 'Read comments';
+  repliesComments = [];
+  replyId: number;
+  up: number;
 
   constructor(private favoritesService: FavoritesService,
               private commentsService: CommentsService) { }
@@ -30,7 +35,7 @@ export class FavoritesComponent implements OnInit {
   ngOnInit() {
   	this.favoritesService.getFavoriteAlbums()
   	   .subscribe(
-			   res => {this.favAlbums = res.data; console.log(res.data);},
+			   res => this.favAlbums = res.data,
          err => console.log(err)
   	 )
   }
@@ -50,11 +55,12 @@ export class FavoritesComponent implements OnInit {
   // on click read all comments from clicked album
   onRead(id: string) {
     this.id = id;
+    this.showComments = !this.showComments;
     this.commentsService.getComments(this.id)
         .subscribe(
           res => {
             this.comments = res.data; 
-            console.log(res.data)
+            console.log(res.data);
           },
           err => console.log(err)
         )
@@ -65,9 +71,40 @@ export class FavoritesComponent implements OnInit {
     this.commentId = id;
   }
 
+  // on submit Add image to album
   onSubmit(f: ngForm) {
     console.log(f.value);
     this.form.reset();
+  }
+
+  // get all replies from comment parent
+  onReadAllChildrenComments(id: number) {
+    this.replyId = id;
+    this.commentsService.getReplyComments(this.replyId)
+      .subscribe(
+        res => {console.log(res.data); this.repliesComments = res.data.children; },
+        err => console.log(err)
+      )
+  }
+
+  // vote for comment NE RADIIII
+  onVote(id: number) {
+    this.up ++;
+    this.commentsService.voteForComment(id, this.up)
+      .subscribe(
+        res => console.log(res.data.ups),
+        err => console.log(err)
+      )
+  }
+
+  // negde trokiram 
+  onDelete(id: number) {
+    console.log(id);
+    this.commentsService.deleteComment(id)
+      .subscribe(
+        res => console.log(res),
+        err => console.log(err)
+      )
   }
 
 }
