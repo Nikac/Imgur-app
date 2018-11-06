@@ -14,9 +14,14 @@ export class CommentsService {
   	return this.http.get<any>(`${this.url}/gallery/`+ galleryHash +`/comments`);
   }
 
+  // get one comment
+  getComment(id: string) {
+    return this.http.get<any>(`${this.url}/comment/` + id)
+  }
+
   // ovo treba prepraviti
-  newComment(galleryHash: string, comment: string) {
-  	return this.http.post<any>(`${this.url}/`+ galleryHash +`/` + comment);
+  newComment(galleryHash: string, comment) {
+  	return this.http.post<any>(`${this.url}/gallery/`+ galleryHash + `/comment`, comment);
   }
 
   // get children comments of comment
@@ -26,7 +31,7 @@ export class CommentsService {
 
   // vote for comment NE RADI!!!!! ne razumem api
   voteForComment(commentId: number, up: number) {
-  	return this.http.post<any>(`${this.url}/comment/` +  commentId + `/vote/` + up);
+  	return this.http.post<any>(`${this.url}/comment/`+commentId+ `/vote/` + up, up);
   }
 
   // deleting comment

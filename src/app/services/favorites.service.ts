@@ -21,7 +21,7 @@ export class FavoritesService {
 
   // Post image to favorite album
   addImage(image: string) {
-  	return this.http.post<any>(`api/` + image)
+  	return this.http.post<any>(`${this.url}/image`, image)
   }
 
 }

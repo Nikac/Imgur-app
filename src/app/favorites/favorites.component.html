@@ -35,6 +35,7 @@
 			</tr>
 			<ng-container *ngIf="comments.length > 1">
 				<h4 class="comments__heading">Comments</h4>
+
 				<tr *ngFor="let comment of comments | slice:0:showAllComments">
 					<td colspan="5">
 						{{ comment.comment }}<br>
@@ -58,19 +59,17 @@
 								<li class="list-group-item" *ngFor="let reply of repliesComments">{{ reply.comment }}</li>
 							</ng-container>
 						</ul>
-						<form 
-							class="form-inline"
-							*ngIf="comment.id === commentId"
-							(ngSubmit)="onSubmit(f)" 
-							#f="ngForm">
+						<ng-container *ngIf="comment.id === commentId">
 							<div class="form-group">
-								<input type="text" 
+								<input 
+									type="text" 
 									name="comment" 
 									class="form-control"
-									ngModel>
-								<button class="btn btn-primary btn-sm">leave comment</button>
+									ngModel
+									#f>
+								<button class="btn btn-primary btn-sm" (click)="onSubmit(f)">leave comment</button>
 							</div>
-						</form>
+						</ng-container>
 					</td>
 				</tr>
 				<tr *ngIf="showAllComments === 5">
@@ -78,10 +77,25 @@
 						class="btn btn-success btn-sm btn-load"
 						(click)="showAllComments=1000">Load all comments</button>
 				</tr>
+				<tr>
+					<td  colspan="5">
+							<div class="form-group">
+								<label>Leave comment</label>
+								<input 
+									type="text"
+									class="form-control" 
+									name="mainComment"
+									[(ngModel)]="mainComment">
+							</div>
+							<button 
+								class="btn btn-primary btn-sm" 
+								(click)="onLeaveComment(mainComment)">Leave comment</button>
+					</td>
+				</tr>
 			</ng-container>
 		</tbody>
 	</table>
 
 	<hr>
-	<app-favorite-form></app-favorite-form>
+	<app-favorite-form *ngIf=""></app-favorite-form>
 </div>

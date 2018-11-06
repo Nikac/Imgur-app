@@ -9,23 +9,20 @@ import { FavoritesService } from '../../services/favorites.service';
   styleUrls: ['./favorite-form.component.css']
 })
 export class FavoriteFormComponent implements OnInit {
-  image: File = null;
+  imageUrl: File = null;
+  image: string;
 
  
   constructor(private favoritesService: FavoritesService) { }
 
   ngOnInit() {}
 
+  // treba napraviti da radi
   onSubmit() {
   	const fd = new FormData();
   	fd.append('image', this.imageUrl);
  
-
-  	fd.forEach((value,key) => {
-	      this.image = key+'='+value;
-	});
-
-	console.log(this.image);
+	  console.log(this.image);
   
   	this.favoritesService.addImage(this.image)
   		.subscribe(
@@ -44,8 +41,8 @@ export class FavoriteFormComponent implements OnInit {
   		imageUrl: new FormControl('', Validators.required)
   	});
 
-  get title() { return this.imageForm.get('title').value}
-  get imagePath() { return this.imageForm.get('imageUrl').value}
+  get title() { return this.imageForm.get('title').value }
+  get imagePath() { return this.imageForm.get('imageUrl').value }
 
 }
 

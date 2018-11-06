@@ -24,7 +24,7 @@ export class GalleriesComponent implements OnInit {
 
   ngOnInit() {
      // GET all albums
-     this.galleryService.getAlbums().subscribe(result => this.albums = result.data)  
+     this.galleryService.getAlbums().subscribe((result:any) => this.albums = result.data)  
      this.galleryService.newCreatedAlbum
       .pipe(
         mergeMap(value => this.galleryService.getAlbum(value))

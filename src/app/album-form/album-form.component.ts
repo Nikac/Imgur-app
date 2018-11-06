@@ -13,10 +13,22 @@ import { Observable } from 'rxjs';
 })
 export class AlbumFormComponent implements OnInit{
   @ViewChild('f') form: NgForm;
-  album = {};
-  album.ids = [];
+  album = {
+    id: '',
+    title: '',
+    description: '',
+    cover: '',
+    images: []
+  };
+  ids: string[] = [];
   editMode: boolean = false;
-  newAlbum = {};
+  newAlbum = {
+    id: '',
+    title: '',
+    description: '',
+    cover: '',
+    images: []
+  };
 
   constructor(private galleryService: GalleryService) { }
 
@@ -31,9 +43,9 @@ export class AlbumFormComponent implements OnInit{
         res => { 
           this.album = res.data; 
           // filter through images array to get ids for the form
-          this.album.images.filter(ids => this.ids.push(ids.id));
+          this.album.images.filter(album => this.ids.push(album.id));
           console.log(this.ids);
-          this.album.ids = this.ids;
+          // this.album.images = this.ids;
           this.editMode =true;
         },
         err => console.log(err)
@@ -53,6 +65,7 @@ export class AlbumFormComponent implements OnInit{
                 console.log(res);
                 this.album = res;
                 // this.galleryService.getUpdatedAlbum(this.album);
+                this.form.reset();
               },
               err => console.log(err)
             )

@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { Router, RouterModule } from '@angular/router';
+import { Routes, RouterModule } from '@angular/router';
 
 import { GalleriesComponent } from './galleries/galleries.component';
 import { AlbumFormComponent } from './album-form/album-form.component';

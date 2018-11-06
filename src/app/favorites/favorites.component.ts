@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { Ngform } from '@angulr/forms';
+import { map, mergeMap } from 'rxjs/operators';
+import { NgForm } from '@angular/forms';
 
 import { FavoritesService } from '../services/favorites.service';
 import { CommentsService } from  '../services/comments.service';
@@ -14,6 +14,7 @@ import { CommentsService } from  '../services/comments.service';
 export class FavoritesComponent implements OnInit {
   @ViewChild('f') form:NgForm;
 
+
   favorites$: Observable<any>;
   favAlbums = [];
   album = {};
@@ -21,13 +22,14 @@ export class FavoritesComponent implements OnInit {
   id: string;
   comment: string;
   showForm: false;
-  commentId: number;
+  commentId: string;
   showAllComments = 5;
   showComments: boolean =false;
   showHideComments: string = 'Read comments';
   repliesComments = [];
   replyId: number;
   up: number;
+  mainComment: any;
 
   constructor(private favoritesService: FavoritesService,
               private commentsService: CommentsService) { }
@@ -66,13 +68,28 @@ export class FavoritesComponent implements OnInit {
         )
   }
 
+  // treba napraviti da radiiii
+  onLeaveComment(mainComment) {
+    this.mainComment = mainComment;
+
+    console.log(this.id + ' ' + this.mainComment);
+
+    this.commentsService.newComment(this.id, this.mainComment)
+      .subscribe(
+        res => console.log(res),
+        err => console.log(err)
+      )
+      // reset input element
+      this.mainComment = '';
+  } 
+
   // open the input for leaving comment
   onAddComment(id: string) {
     this.commentId = id;
   }
 
   // on submit Add image to album
-  onSubmit(f: ngForm) {
+  onSubmit(f: NgForm) {
     console.log(f.value);
     this.form.reset();
   }
@@ -87,24 +104,31 @@ export class FavoritesComponent implements OnInit {
       )
   }
 
-  // vote for comment NE RADIIII
-  onVote(id: number) {
+  // vote for comment NE RADIIII res.data.ups res.data.id
+  onVote(id: string) {
     this.up ++;
-    this.commentsService.voteForComment(id, this.up)
-      .subscribe(
-        res => console.log(res.data.ups),
-        err => console.log(err)
-      )
-  }
 
-  // negde trokiram 
-  onDelete(id: number) {
-    console.log(id);
-    this.commentsService.deleteComment(id)
+    this.commentsService.getComment(id)
+      .pipe(
+        mergeMap((value: any) => this.commentsService.voteForComment(value.data.id, value.data.ups))
+      )
       .subscribe(
-        res => console.log(res),
+        res => {
+          console.log(res)
+
+        },
         err => console.log(err)
       )
+
+    // this.commentsService.voteForComment(id, this.up)
+    //   .subscribe(
+    //     res => {
+    //       if (res.data === true) {
+    //         this.comment.vote +=1;
+    //       }
+    //     },
+    //     err => console.log(err)
+    //   )
   }
 
 }

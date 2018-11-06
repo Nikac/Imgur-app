@@ -6,12 +6,12 @@
 			<input 
 				type="text" 
 				class="form-control"
-				name="ids"
-				[(ngModel)]="album.ids"
-				#ids="ngModel"
+				name="images"
+				[(ngModel)]="album.images"
+				#images="ngModel"
 				required>
 			<div class="alert alert-danger"
-				*ngIf="ids.invalid && ((ids.dirty || ids.touched) && title === '')">
+				*ngIf="images.invalid && ((images.dirty || images.touched) && title === '')">
 				<p *ngIf="deletehashes.errors.required"> This field is required.</p>
 			</div>
 		</div>
