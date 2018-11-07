@@ -17,7 +17,7 @@ export class FavoriteFormComponent implements OnInit {
 
   ngOnInit() {}
 
-  // treba napraviti da radi
+  // on submit leave comment treba napraviti da radi
   onSubmit() {
   	const fd = new FormData();
   	fd.append('image', this.imageUrl);
@@ -36,6 +36,7 @@ export class FavoriteFormComponent implements OnInit {
   	this.imageUrl = event.target.files[0].name;
   }
 
+  // comment form
   imageForm = new FormGroup({
   		title: new FormControl(''),
   		imageUrl: new FormControl('', Validators.required)

@@ -45,21 +45,28 @@ export class AlbumFormComponent implements OnInit{
           // filter through images array to get ids for the form
           this.album.images.filter(album => this.ids.push(album.id));
           console.log(this.ids);
-          // this.album.images = this.ids;
+          this.album.images = this.ids;
           this.editMode =true;
         },
         err => console.log(err)
       )
   };
 
-  // Save new album
+  // Save new album or update
   onSubmit(f: NgForm) {
     this.newAlbum = f.value;
+
+    let fd = new FormData();
+    // treba ispraviti ovo
+    // fd.append('ids', this.album.images);
+    fd.append('title', this.album.title);
+    fd.append('description', this.album.description);
+    fd.append('cover', this.album.cover);
 
     // if album object is not empty update
     if (this.editMode) {
           // update album
-          this.galleryService.updateAlbum(this.album.id, this.album)
+          this.galleryService.updateAlbum(this.album.id, fd)
             .subscribe(
               res => {
                 console.log(res);

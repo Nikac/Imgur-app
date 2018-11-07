@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
 import { NgForm } from '@angular/forms';
+import { HttpErrorResponse } from '@angular/common/http';
 
 import { FavoritesService } from '../services/favorites.service';
 import { CommentsService } from  '../services/comments.service';
@@ -27,9 +28,12 @@ export class FavoritesComponent implements OnInit {
   showComments: boolean =false;
   showHideComments: string = 'Read comments';
   repliesComments = [];
+  replyNewComment: string;
   replyId: number;
   up: number;
   mainComment: any;
+  image_id: string;
+  errorMsg: string;
 
   constructor(private favoritesService: FavoritesService,
               private commentsService: CommentsService) { }
@@ -56,8 +60,12 @@ export class FavoritesComponent implements OnInit {
 
   // on click read all comments from clicked album
   onRead(id: string) {
+    // getting ID
     this.id = id;
+    console.log(this.id);
+
     this.showComments = !this.showComments;
+    // get all comments
     this.commentsService.getComments(this.id)
         .subscribe(
           res => {
@@ -65,33 +73,55 @@ export class FavoritesComponent implements OnInit {
             console.log(res.data);
           },
           err => console.log(err)
-        )
+        )  
   }
 
-  // treba napraviti da radiiii
+  // leave comment
   onLeaveComment(mainComment) {
-    this.mainComment = mainComment;
-
-    console.log(this.id + ' ' + this.mainComment);
-
-    this.commentsService.newComment(this.id, this.mainComment)
+    // form data for API
+    let fd = new FormData();
+    fd.append('image_id', this.id);
+    fd.append('comment', mainComment);
+    
+    // leave comment 
+    this.commentsService.newComment(fd)
+      .pipe(
+        mergeMap( (value: any) => this.commentsService.getComment(value.data.id))
+      )
       .subscribe(
-        res => console.log(res),
+        res => this.comments.push(res.data),
         err => console.log(err)
       )
-      // reset input element
-      this.mainComment = '';
+    //reset input element
+    this.mainComment = '';
+    
   } 
 
   // open the input for leaving comment
-  onAddComment(id: string) {
-    this.commentId = id;
+  onAddComment(image_id: string, commentId: string) {
+    this.commentId = commentId;
+    this.image_id = image_id;
   }
 
-  // on submit Add image to album
-  onSubmit(f: NgForm) {
-    console.log(f.value);
-    this.form.reset();
+  // on submit reply to a comment
+  onSubmitReplyComment(f: NgForm) {
+    let comment = f.value;
+    // form data for API
+    let fd = new FormData();
+    fd.append('image_id', this.image_id);
+    fd.append('comment', comment)
+
+    this.commentsService.newCommentReply(this.commentId, fd)
+      .pipe(
+        mergeMap((value: any) => this.commentsService.getComment(value.data.id))
+      )
+      .subscribe(
+        res => {
+          this.replyNewComment = res.data.comment;
+          this.repliesComments.push(this.replyNewComment);
+        },
+        err => console.log(err)
+      )
   }
 
   // get all replies from comment parent
@@ -99,33 +129,35 @@ export class FavoritesComponent implements OnInit {
     this.replyId = id;
     this.commentsService.getReplyComments(this.replyId)
       .subscribe(
-        res => {console.log(res.data); this.repliesComments = res.data.children; },
+        res => this.repliesComments = res.data.children,
         err => console.log(err)
+      )
+  }
+  // deleteing comments
+  onDeleteComment(id: string, index: number) {
+    console.log(id);
+    this.commentsService.deleteComment(id)
+      .subscribe(
+        res => {
+          console.log(res);
+          this.comments.splice(index, 1);
+        },
+        err => {
+          console.log(err);
+          if (err instanceof HttpErrorResponse && err.error.status === 404) {
+            this.errorMsg = 'You can only delete your comment. Please choose only yor comment.';
+          }
+        }
       )
   }
 
   // vote for comment NE RADIIII res.data.ups res.data.id
   onVote(id: string) {
-    this.up ++;
-
-    this.commentsService.getComment(id)
-      .pipe(
-        mergeMap((value: any) => this.commentsService.voteForComment(value.data.id, value.data.ups))
-      )
-      .subscribe(
-        res => {
-          console.log(res)
-
-        },
-        err => console.log(err)
-      )
-
-    // this.commentsService.voteForComment(id, this.up)
+    // this.commentsService.voteForComment(id)
     //   .subscribe(
     //     res => {
-    //       if (res.data === true) {
-    //         this.comment.vote +=1;
-    //       }
+    //       console.log(res);
+          
     //     },
     //     err => console.log(err)
     //   )

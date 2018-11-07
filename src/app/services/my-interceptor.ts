@@ -12,6 +12,7 @@ export class MyInterceptor implements HttpInterceptor {
 
 		let request = req.clone({
 			headers: new HttpHeaders().append('Authorization', 'Bearer beb7fb0135f13e770527466d6b69c2b9e529126f')
+									  // .append('Content-Type':'multipart/form-data')
 									
 		});
 

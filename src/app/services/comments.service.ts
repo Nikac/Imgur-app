@@ -20,8 +20,8 @@ export class CommentsService {
   }
 
   // ovo treba prepraviti
-  newComment(galleryHash: string, comment) {
-  	return this.http.post<any>(`${this.url}/gallery/`+ galleryHash + `/comment`, comment);
+  newComment(comment) {
+  	return this.http.post<any>(`${this.url}/comment`, comment);
   }
 
   // get children comments of comment
@@ -29,13 +29,17 @@ export class CommentsService {
   	return this.http.get<any>(`${this.url}/comment/`+ commentId + `/replies`);
   }
 
+  newCommentReply(commentId: string, comment) {
+    return this.http.post<any>(`${this.url}/comment/` + commentId, comment)
+  }
+
   // vote for comment NE RADI!!!!! ne razumem api
-  voteForComment(commentId: number, up: number) {
-  	return this.http.post<any>(`${this.url}/comment/`+commentId+ `/vote/` + up, up);
+  voteForComment(commentId: string, up) {
+  	return this.http.post<any>(`${this.url}/comment/`+ commentId + `/vote/up`, up);
   }
 
   // deleting comment
-  deleteComment(commentId: number) {
+  deleteComment(commentId: string) {
   	return this.http.delete<any>(`${this.url}/comment/` + commentId);
   }
 

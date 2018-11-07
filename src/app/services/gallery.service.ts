@@ -37,7 +37,7 @@ export class GalleryService {
   }
 
   // Put album
-  updateAlbum(id: string, album: Album) {
+  updateAlbum(id: string, album) {
     return this.http.put<any>(`${this.url}/album/` + id, album);
   }
 
