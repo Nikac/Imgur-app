@@ -182,7 +182,6 @@ export class FavoritesComponent implements OnInit, OnDestroy {
 
   // vote for comment 
   onVote(id: string, comment) {
-    this.comment = comment;
     this.up = comment.ups;
 
     this.commentsService.voteForComment(id, this.up)
@@ -191,7 +190,7 @@ export class FavoritesComponent implements OnInit, OnDestroy {
       )
       .subscribe(
         res => {
-          this.comment.ups +=1;             
+          comment.ups +=1;             
         },
         err => console.log(err)
       )
