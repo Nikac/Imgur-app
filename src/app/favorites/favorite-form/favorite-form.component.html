@@ -5,27 +5,13 @@
 			<label>Title</label>
 			<input 
 				type="text" 
-				name="title"
+				name="ids"
 				class="form-control"
-				formControlName="title"
+				formControlName="ids"
 				required>
 			<div class="alert alert-danger"
-				*ngIf="(title.invalid && (title.dirty || title.touched))">
-				<p *ngIf="title.errors.required">This field is required.</p>		
-			</div>
-		</div>
-		<div class="form-group">
-			<label>Image URL</label>
-			<input 
-				type="file" 
-				name="imageUrl"
-				(change)="onFileSelected($event)"
-				class="form-control"
-				formControlName="imageUrl"
-				>
-			<div class="alert alert-danger"
-				*ngIf="(imagePath.invalid && (imagePath.dirty || imagePath.touched))">
-				<p *ngIf="imagePath.errors.required">This field is required.</p>		
+				*ngIf="(deleteHashes.invalid && (deleteHashes.dirty || deleteHashes.touched))">
+				<p *ngIf="deleteHashes.errors.required">This field is required.</p>		
 			</div>
 		</div>
 		<button class="btn btn-primary">Submit</button>

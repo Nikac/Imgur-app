@@ -1,5 +1,6 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
+import {untilComponentDestroyed} from "@w11k/ngx-componentdestroyed";
 
 import { GalleryService } from '../services/gallery.service';
 import { Album } from '../models/album.model';
@@ -11,7 +12,7 @@ import { Observable } from 'rxjs';
   templateUrl: './album-form.component.html',
   styleUrls: ['./album-form.component.css']
 })
-export class AlbumFormComponent implements OnInit{
+export class AlbumFormComponent implements OnInit, OnDestroy {
   @ViewChild('f') form: NgForm;
   album = {
     id: '',
@@ -20,15 +21,16 @@ export class AlbumFormComponent implements OnInit{
     cover: '',
     images: []
   };
-  ids: string[] = [];
   editMode: boolean = false;
-  newAlbum = {
+  newAlbum: Album= {
     id: '',
     title: '',
     description: '',
     cover: '',
     images: []
   };
+  albumId: string;
+  ids: string[] = [];
 
   constructor(private galleryService: GalleryService) { }
 
@@ -36,16 +38,17 @@ export class AlbumFormComponent implements OnInit{
     // getting id 
    this.galleryService.newAlbumID
       .pipe(
+        untilComponentDestroyed(this),
         // merging id with getAlbum(id)
         mergeMap(val => this.galleryService.getAlbum(val))
       )
       .subscribe(
         res => { 
           this.album = res.data; 
-          // filter through images array to get ids for the form
+        
+          // filter through images array to get ids for the form   TREBA NAMESTIT DA radi
           this.album.images.filter(album => this.ids.push(album.id));
-          console.log(this.ids);
-          this.album.images = this.ids;
+          console.log(this.album.images);
           this.editMode =true;
         },
         err => console.log(err)
@@ -56,17 +59,23 @@ export class AlbumFormComponent implements OnInit{
   onSubmit(f: NgForm) {
     this.newAlbum = f.value;
 
+    console.log(this.album.id, this.newAlbum);
+
     let fd = new FormData();
     // treba ispraviti ovo
-    // fd.append('ids', this.album.images);
-    fd.append('title', this.album.title);
-    fd.append('description', this.album.description);
-    fd.append('cover', this.album.cover);
+    // fd.append('deletehashes', this.album.images);
+    fd.append('title', this.newAlbum.title);
+    fd.append('description', this.newAlbum.description);
+    fd.append('cover', this.newAlbum.cover);
+
 
     // if album object is not empty update
     if (this.editMode) {
           // update album
           this.galleryService.updateAlbum(this.album.id, fd)
+            .pipe(
+              untilComponentDestroyed(this)
+            )
             .subscribe(
               res => {
                 console.log(res);
@@ -79,6 +88,9 @@ export class AlbumFormComponent implements OnInit{
     } else {
       // if its not empty create new one
       this.galleryService.newAlbum(this.newAlbum)
+        .pipe(
+            untilComponentDestroyed(this)
+        )
         .subscribe(
             res => {
                 this.newAlbum = res.data;
@@ -92,4 +104,6 @@ export class AlbumFormComponent implements OnInit{
         )
     } 
   };
+
+  ngOnDestroy() {}
 }

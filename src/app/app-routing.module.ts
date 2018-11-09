@@ -7,9 +7,9 @@ import { AlbumDetailsComponent } from './album-details/album-details.component';
 import { FavoritesComponent } from './favorites/favorites.component';
 
 const appRoutes: Routes = [
-	
 	{ path: '', component: GalleriesComponent },
-	{ path: 'favorites', component: FavoritesComponent }
+	{ path: 'favorites', component: FavoritesComponent },
+	{ path: '**', component: GalleriesComponent }
 ];
 
 @NgModule({

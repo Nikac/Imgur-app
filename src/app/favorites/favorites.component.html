@@ -18,7 +18,8 @@
 							<img src="{{favorite.images[0].link}}" alt="pic" style="width: 50px;">
 						</td>
 						<td>
-							<svg class="icon">
+							<svg class="icon"
+								(click)="onAddImage(favorite.id)">
 								<use xlink:href="../../assets/img/sprites.svg#icon-plus"></use>
 							</svg>
 						</td>
@@ -56,7 +57,7 @@
 								<li>
 									<button 
 										class="btn btn-sm" 
-										(click)="onVote(comment.id)">
+										(click)="onVote(comment.id, comment)">
 										Like
 									</button> 
 									Likes: <strong>{{comment.ups}}</strong>
@@ -124,5 +125,5 @@
 	</table>
 
 	<hr>
-	<app-favorite-form *ngIf=""></app-favorite-form>
+	<app-favorite-form *ngIf="showForm"></app-favorite-form>
 </div>

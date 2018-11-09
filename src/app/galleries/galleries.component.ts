@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { untilComponentDestroyed } from "@w11k/ngx-componentdestroyed";
 
 import { GalleryService } from '../services/gallery.service';
 import { Album } from '../models/album.model';
@@ -11,7 +12,7 @@ import { Observable } from 'rxjs/Observable';
   templateUrl: './galleries.component.html',
   styleUrls: ['./galleries.component.css']
 })
-export class GalleriesComponent implements OnInit {
+export class GalleriesComponent implements OnInit, OnDestroy {
   album: Album; 
   albums = [];
   updateAlbum: Album;
@@ -27,11 +28,19 @@ export class GalleriesComponent implements OnInit {
      this.galleryService.getAlbums().subscribe((result:any) => this.albums = result.data)  
      this.galleryService.newCreatedAlbum
       .pipe(
+        untilComponentDestroyed(this),
         mergeMap(value => this.galleryService.getAlbum(value))
       ).subscribe(
         res => this.albums.push(res.data),
         err => console.log(err)
       )
+
+      // get updated album
+      // this.galleryService.newUpdatedAlbum
+      //   .subscribe(
+      //     res => console.log(res),
+      //     err => console.log(err)
+      //   )
   }
 
   // Read Album
@@ -44,6 +53,9 @@ export class GalleriesComponent implements OnInit {
   onAdd(id: string) {
     this.showForm = !this.showForm;
     this.galleryService.getAlbum(id)
+      .pipe(
+        untilComponentDestroyed(this)
+      )
       .subscribe(
         res => console.log(res),
         err => console.log(err)
@@ -61,11 +73,16 @@ export class GalleriesComponent implements OnInit {
   onDelete(id: string, i: number) {
      this.albumHash =id;
      this.galleryService.deleteAlbum(this.albumHash)
-            .subscribe(
-                data => console.log(data),
-                err => console.log(err)
-            )
+        .pipe(
+           untilComponentDestroyed(this)
+        )
+        .subscribe(
+            data => console.log(data),
+            err => console.log(err)
+        )
     this.albums.splice(i, 1);
   };
+
+  ngOnDestroy() {}
 
 }

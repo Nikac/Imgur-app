@@ -13,13 +13,13 @@ import { catchError } from 'rxjs/operators';
 export class GalleryService {
   url: string = 'https://api.imgur.com/3';
 
-
   constructor(private http: HttpClient) { }
 
   public newAlbumSubject = new Subject<any>();
   public newAlbumID = new Subject<any>();
   public newGalleryHash = new Subject<any>();
   public newCreatedAlbum = new Subject<any>();
+  // public newUpdatedAlbum = new Subject<any>();
 
   // GET albums
   getAlbums() {
@@ -64,4 +64,8 @@ export class GalleryService {
   getNewAlbum(id: string) {
     this.newCreatedAlbum.next(id);
   }
+
+  // getUpdatedAlbum(album: Album) {
+  //   this.newUpdatedAlbum.next(album);
+  // }
 }

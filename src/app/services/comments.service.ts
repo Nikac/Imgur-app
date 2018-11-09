@@ -35,11 +35,11 @@ export class CommentsService {
 
   // vote for comment NE RADI!!!!! ne razumem api
   voteForComment(commentId: string, up) {
-  	return this.http.post<any>(`${this.url}/comment/`+ commentId + `/vote/up`, up);
+  	return this.http.post<any>(`${this.url}/comment/`+ commentId + `/vote/` + up , up);
   }
 
   // deleting comment
-  deleteComment(commentId: string) {
+  deleteComment(commentId: number) {
   	return this.http.delete<any>(`${this.url}/comment/` + commentId);
   }
 
